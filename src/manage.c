@@ -71,7 +71,6 @@ static void search_history()
         {
           GtkTreeIter row_iter;
           gtk_list_store_append(search_list, &row_iter);
-          string = ellipsize_string(string);
           string = remove_newlines_string(string);
           int row_num = g_list_position(history, element);
           gtk_list_store_set(search_list, &row_iter, 0, row_num, 1, string->str, -1);
@@ -101,7 +100,6 @@ static void search_history()
         GString *string = g_string_new((gchar*)elem_data->content);
         GtkTreeIter row_iter;
         gtk_list_store_append(search_list, &row_iter);
-        string = ellipsize_string(string);
         string = remove_newlines_string(string);
         int row_num = g_list_position(history, element);
         gtk_list_store_set(search_list, &row_iter, 0, row_num, 1, string->str, -1);
