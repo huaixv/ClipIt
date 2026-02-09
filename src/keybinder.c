@@ -24,6 +24,7 @@
 
 #include "eggaccelerators.h"
 #include "keybinder.h"
+#include "gdkxutil.h"
 
 /* Uncomment the next line to print a debug trace. */
 /* #define DEBUG */
@@ -233,9 +234,18 @@ keymap_changed (GdkKeymap *map)
 	}
 }
 
+gboolean
+keybinder_available (void)
+{
+	return gdk_is_under_x11();
+}
+
 void
 keybinder_init (void)
 {
+	if (!keybinder_available ())
+		return;
+
 	GdkKeymap *keymap = gdk_keymap_get_default ();
 	GdkWindow *rootwin = gdk_get_default_root_window ();
 
@@ -256,6 +266,9 @@ keybinder_bind (const char           *keystring,
 		       BindkeyHandler  handler,
 		       gpointer              user_data)
 {
+	if (!keybinder_available ())
+		return;
+
 	Binding *binding;
 	gboolean success;
 
@@ -279,6 +292,9 @@ void
 keybinder_unbind (const char           *keystring,
 			 BindkeyHandler  handler)
 {
+	if (!keybinder_available ())
+		return;
+
 	GSList *iter;
 
 	for (iter = bindings; iter != NULL; iter = iter->next) {
@@ -304,6 +320,9 @@ keybinder_unbind (const char           *keystring,
 gboolean
 keybinder_is_modifier (guint keycode)
 {
+	if (!keybinder_available ())
+		return FALSE;
+
 	gint i;
 	gint map_size;
 	XModifierKeymap *mod_keymap;

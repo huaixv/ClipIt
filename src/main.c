@@ -37,6 +37,7 @@
 #endif
 #include "main.h"
 #include "utils.h"
+#include "gdkxutil.h"
 #include "history.h"
 #include "keybinder.h"
 #include "preferences.h"
@@ -119,6 +120,9 @@ gboolean selected_by_input(const GtkWidget *history_menu, const GdkEventKey *eve
 
 /* Determine, if selection comes from excluded window. */
 static gboolean is_selection_from_excluded_window(Atom selection_type) {
+  if (!gdk_is_under_x11())
+    return FALSE;
+
   gboolean excluded = FALSE;
   Window window;
   XTextProperty text_prop_return;
